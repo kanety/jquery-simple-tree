@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  <link rel="stylesheet" href="dist/jquery-simple-tree.css">
+  <script src="dist/jquery-simple-tree.js"></script>
+</head>
+<body>
+  <h1>Basic tree</h1>
+  <button type="button" id="expander">expand</button>
+  <button type="button" id="collapser">collapse</button>
+  <ul id="basic">
+    <li data-node-id="1">
+      <span>1</span>
+      <ul>
+        <li data-node-id="1.1">
+          <span>1.1</span>
+          <ul>
+            <li data-node-id="1.1.1">
+              <span>1.1.1</span>
+            </li>
+            <li data-node-id="1.1.2">
+              <span>1.1.2</span>
+            </li>
+          </ul>
+        </li>
+        <li data-node-id="1.2">
+          <span>1.2</span>
+          <ul>
+            <li data-node-id="1.2.1">
+              <span>1.2.1</span>
+            </li>
+            <li data-node-id="1.2.2">
+              <span>1.2.2</span>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li data-node-id="2">
+      <span>2</span>
+      <ul>
+        <li data-node-id="2.1">
+          <span>2.1</span>
+        </li>
+        <li data-node-id="2.2">
+          <span>2.2</span>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <script>
+  $('#basic').simpleTree({
+    expander: $('#expander'),
+    collapser: $('#collapser'),
+    storeState: true
+  });
+  </script>
+
+  <h1>Set opened nodes</h1>
+  <ul id="opened">
+    <li data-node-id="1">
+      <span>1</span>
+      <ul>
+        <li data-node-id="1.1">
+          <span>1.1</span>
+          <ul>
+            <li data-node-id="1.1.1">
+              <span>1.1.1</span>
+            </li>
+          </ul>
+        </li>
+        <li data-node-id="1.2">
+          <span>1.2</span>
+          <ul>
+            <li data-node-id="1.2.1">
+              <span>1.2.1</span>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <script>
+  $('#opened').simpleTree({
+    opened: [1, 1.1]
+  });
+  </script>
+
+  <h1>Callback</h1>
+  <ul id="callback">
+    <li data-node-id="1">
+      <span>1</span>
+      <ul>
+        <li data-node-id="1.1">
+          <span>1.1</span>
+          <ul>
+            <li data-node-id="1.1.1" data-node-lazy="true">
+              <span>1.1.1</span>
+            </li>
+            <li data-node-id="1.1.2" data-node-lazy="true">
+              <span>1.1.2</span>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <p id="message"> </p>
+  <script>
+  $('#callback').simpleTree().on('open', function(e, $node) {
+    var nodeID = $node.data('node-id');
+    $('#message').append("opened " + nodeID + " ");
+    if ($node.data('node-lazy')) {
+      $node.data('node-lazy', false);
+      var newID = nodeID + '.1';
+      var loaded = '<ul><li data-node-id="' + newID + '" data-node-lazy="true"><span>' + newID + '</span></li></ul>';
+      $node.append(loaded);
+      $('#callback').data('simple-tree').build();
+    }
+  }).on('close', function(e, $node) {
+    var nodeID = $node.data('node-id');
+    $('#message').append("closed " + nodeID + " ");
+  });
+  </script>
+</body>
+</html>
