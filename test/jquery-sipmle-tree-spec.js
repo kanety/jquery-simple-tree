@@ -46,9 +46,9 @@ describe('jquery-simple-tree', function() {
   it('has callbacks', function() {
     var $tree = $('#callback');
     var $message = $('#message');
-    $tree.simpleTree().on('open', function(e, $node) {
+    $tree.simpleTree().on('node:open', function(e, $node) {
       $message.append("opened " + $node.data('node-id') + " ");
-    }).on('close', function(e, $node) {
+    }).on('node:close', function(e, $node) {
       $message.append("closed " + $node.data('node-id') + " ");
     });
 

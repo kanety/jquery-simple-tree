@@ -109,7 +109,7 @@
   </ul>
   <p id="message"> </p>
   <script>
-  $('#callback').simpleTree().on('open', function(e, $node) {
+  $('#callback').simpleTree().on('node:open', function(e, $node) {
     var nodeID = $node.data('node-id');
     $('#message').append("opened " + nodeID + " ");
     if ($node.data('node-lazy')) {
@@ -119,7 +119,7 @@
       $node.append(loaded);
       $('#callback').data('simple-tree').build();
     }
-  }).on('close', function(e, $node) {
+  }).on('node:close', function(e, $node) {
     var nodeID = $node.data('node-id');
     $('#message').append("closed " + nodeID + " ");
   });
