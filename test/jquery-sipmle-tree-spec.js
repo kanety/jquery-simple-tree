@@ -31,7 +31,7 @@ describe('jquery-simple-tree', function() {
     expect($tree.find('ul:hidden').length).toEqual(0);
   });
 
-  it('has default opened nodes', function() {
+  it('specifies opened nodes', function() {
     var $tree = $('#opened');
     $tree.simpleTree({
       opened: [1, 1.1]

@@ -43,7 +43,7 @@ Then run:
 $('#tree').simpleTree();
 ```
 
-If you want to set opened nodes by default:
+Specify opened nodes:
 
 ```javascript
 $('#tree').simpleTree({
