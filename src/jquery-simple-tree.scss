@@ -1,13 +1,17 @@
 ul.simple-tree {
   padding: 0;
+  margin: 0;
 
+  ul {
+    padding-left: 2em;
+  }
   li {
     list-style-type: none;
   }
   li > .tree-icon {
     display: inline-block;
-    width: 12px;
-    padding: 0 5px;
+    width: 1.5em;
+    margin: 2px;
     background-color: #eee;
     text-align: center;
     cursor: pointer;
