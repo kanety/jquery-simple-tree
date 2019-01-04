@@ -109,7 +109,7 @@ export default class SimpleTree {
   }
 
   nodes() {
-    return this.$root.find('li[data-node-id]');
+    return this.$root.find('li');
   }
 
   open($node) {
