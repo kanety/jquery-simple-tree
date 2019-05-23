@@ -13,10 +13,10 @@ ul.simple-tree {
     text-align: center;
     cursor: pointer;
   }
-  li.tree-opened > .tree-icon:after {
+  li.tree-opened > .tree-icon:before {
     content: '-';
   }
-  li.tree-closed > .tree-icon:after {
+  li.tree-closed > .tree-icon:before {
     content: '+';
   }
   li.tree-empty > .tree-icon {
