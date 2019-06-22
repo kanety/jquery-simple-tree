@@ -1,46 +1,64 @@
-describe('jquery-simple-tree', function() {
-  beforeEach(function() {
+describe('jquery-simple-tree', () => {
+  beforeEach(() => {
     document.body.innerHTML = __html__['index.html'];
     eval($('script').text());
   });
 
-  it('opens or closes a node', function() {
-    var $tree = $('#basic');
-    var $node = $tree.find('li[data-node-id="1.1"]');
-    var $icon = $node.children('.tree-icon');
+  describe('basic', () => {
+    let $tree, $node, $icon;
+    let $expander, $collapser;
 
-    $icon.click();
-    expect($node.children('ul').is(':visible')).toEqual(false);
-    $icon.click();
-    expect($node.children('ul').is(':visible')).toEqual(true);
+    beforeEach(() => {
+      $tree = $('#basic');
+      $node = $tree.find('li[data-node-id="1.1"]');
+      $icon = $node.children('.tree-icon');
+      $expander = $('#expander');
+      $collapser = $('#collapser');
+    });
+
+    it('opens or closes a node', () => {
+      $icon.click();
+      expect($node.children('ul').is(':visible')).toEqual(false);
+      $icon.click();
+      expect($node.children('ul').is(':visible')).toEqual(true);
+    });
+
+    it('has expander and collapser', () => {
+      $collapser.click();
+      expect($tree.find('ul:visible').length).toEqual(0);
+      $expander.click();
+      expect($tree.find('ul:hidden').length).toEqual(0);
+    });
   });
 
-  it('has expander and collapser', function() {
-    var $tree = $('#basic');
-    var $expander = $('#expander');
-    var $collapser = $('#collapser');
+  describe('open', () => {
+    let $tree;
 
-    $collapser.click();
-    expect($tree.find('ul:visible').length).toEqual(0);
-    $expander.click();
-    expect($tree.find('ul:hidden').length).toEqual(0);
+    beforeEach(() => {
+      $tree = $('#opened');
+    });
+
+    it('specifies opened nodes', () => {
+      expect($tree.find('li[data-node-id="1"]').is(':visible')).toEqual(true);
+      expect($tree.find('li[data-node-id="1.1"]').is(':visible')).toEqual(true);
+      expect($tree.find('li[data-node-id="1.1.1"]').is(':visible')).toEqual(true);
+      expect($tree.find('li[data-node-id="1.2.1"]').is(':visible')).toEqual(false);
+    });
   });
 
-  it('specifies opened nodes', function() {
-    var $tree = $('#opened');
+  describe('callbacks', () => {
+    let $tree;
+    let $message;
 
-    expect($tree.find('li[data-node-id="1"]').is(':visible')).toEqual(true);
-    expect($tree.find('li[data-node-id="1.1"]').is(':visible')).toEqual(true);
-    expect($tree.find('li[data-node-id="1.1.1"]').is(':visible')).toEqual(true);
-    expect($tree.find('li[data-node-id="1.2.1"]').is(':visible')).toEqual(false);
-  });
-
-  it('has callbacks', function() {
-    var $tree = $('#callback');
-    var $message = $('#message');
-
-    $tree.find('li[data-node-id="1.1"] .tree-icon').click().click();
-    expect($message.html()).toContain("opened 1.1");
-    expect($message.html()).toContain("closed 1.1");
+    beforeEach(() => {
+      $tree = $('#callback');
+      $message = $('#message');
+    });
+    
+    it('runs callbacks', () => {
+      $tree.find('li[data-node-id="1.1"] .tree-icon').click().click();
+      expect($message.html()).toContain("opened 1.1");
+      expect($message.html()).toContain("closed 1.1");
+    });
   });
 });

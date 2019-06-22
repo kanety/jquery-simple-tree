@@ -4,6 +4,8 @@ const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 module.exports = {
+  mode: 'production',
+
   entry: {
     "jquery-simple-tree": "./src/jquery-simple-tree.js"
   },
@@ -51,7 +53,7 @@ module.exports = {
           MiniCssExtractPlugin.loader,
           "css-loader",
           "sass-loader"
-        ],
+        ]
       }
     ]
   },

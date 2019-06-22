@@ -165,6 +165,6 @@ export default class SimpleTree {
   }
 
   static setDefaults(options) {
-    $.extend(DEFAULTS, options);
+    return $.extend(DEFAULTS, options);
   }
 }
