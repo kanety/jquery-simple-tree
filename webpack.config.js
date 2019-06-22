@@ -4,7 +4,7 @@ const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 module.exports = {
-  mode: 'production',
+  mode: "production",
 
   entry: {
     "jquery-simple-tree": "./src/jquery-simple-tree.js"
@@ -40,7 +40,11 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        include: [
+          /src/,
+          /test/,
+          /node_modules\/@kanety\/js-store/
+        ],
         use: {
           loader: "babel-loader",
           options: {

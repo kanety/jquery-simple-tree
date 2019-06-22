@@ -10,13 +10,15 @@ describe('jquery-simple-tree', () => {
 
     beforeEach(() => {
       $tree = $('#basic');
-      $node = $tree.find('li[data-node-id="1.1"]');
+      $node = $tree.find('li[data-node-id="1"]');
       $icon = $node.children('.tree-icon');
       $expander = $('#expander');
       $collapser = $('#collapser');
+      $open1 = $('#open1');
+      $close1 = $('#close1');
     });
 
-    it('opens or closes a node', () => {
+    it('opens and closes', () => {
       $icon.click();
       expect($node.children('ul').is(':visible')).toEqual(false);
       $icon.click();
@@ -28,6 +30,13 @@ describe('jquery-simple-tree', () => {
       expect($tree.find('ul:visible').length).toEqual(0);
       $expander.click();
       expect($tree.find('ul:hidden').length).toEqual(0);
+    });
+
+    it('opens and closes by id', () => {
+      $close1.click();
+      expect($node.children('ul').is(':visible')).toEqual(false);
+      $open1.click();
+      expect($node.children('ul').is(':visible')).toEqual(true);
     });
   });
 

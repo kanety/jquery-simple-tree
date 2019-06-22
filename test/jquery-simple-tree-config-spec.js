@@ -1,5 +1,5 @@
-describe('jquery-simple-tree-config', () => {
-  it('gets and sets defaults', () => {
+describe('jquery-simple-tree', () => {
+  it('config', () => {
     let defaults = $.SimpleTree.getDefaults();
     expect(defaults.expander).toEqual(null);
 

@@ -1,16 +1,15 @@
 import $ from 'jquery';
+import Store from '@kanety/js-store';
 
 import { NAMESPACE } from './consts';
-import Store from './store';
 
 const DEFAULTS = {
   expander: null,
   collapser: null,
   opened: 'all',
-  storeState: false,
-  storeKey: NAMESPACE,
-  storeType: 'session',
-  iconTemplate: '<span />'
+  iconTemplate: '<span />',
+  store: null,
+  storeKey: null
 };
 
 export default class SimpleTree {
@@ -21,18 +20,23 @@ export default class SimpleTree {
     this.$expander = $(this.options.expander);
     this.$collapser = $(this.options.collapser);
 
-    if (this.options.storeState) {
-      this.store = new Store(this, this.options)
+    if (this.options.store && this.options.storeKey) {
+      this.store = new Store({
+        type: this.options.store,
+        key: this.options.storeKey
+      })
     }
 
     this.init();
+    this.load();
   }
 
   init() {
     this.$root.addClass(NAMESPACE);
     this.build();
+
+    this.unbind();
     this.bind();
-    this.loadState();
   }
 
   build() {
@@ -98,14 +102,14 @@ export default class SimpleTree {
     this.nodes().each((i, node) => {
       this.show($(node));
     });
-    this.saveState();
+    this.save();
   }
 
   collapse() {
     this.nodes().each((i, node) => {
       this.hide($(node));
     });
-    this.saveState();
+    this.save();
   }
 
   nodes() {
@@ -114,7 +118,7 @@ export default class SimpleTree {
 
   open($node) {
     this.show($node);
-    this.saveState();
+    this.save();
 
     $node.trigger('node:open', [$node]);
   }
@@ -128,7 +132,7 @@ export default class SimpleTree {
 
   close($node) {
     this.hide($node);
-    this.saveState();
+    this.save();
 
     $node.trigger('node:close', [$node]);
   }
@@ -152,12 +156,30 @@ export default class SimpleTree {
     this.close(this.findByID(id));
   }
 
-  saveState() {
-    this.store && this.store.save();
+  save() {
+    if (!this.store) return;
+
+    let ids = this.nodes().filter('.tree-opened').map((i, node) => {
+      return $(node).data('node-id');
+    }).get();
+
+    this.store.set(ids);
   }
 
-  loadState() {
-    this.store && this.store.load();
+  load() {
+    if (!this.store) return;
+
+    let ids = this.store.get();
+    if (!ids) return;
+
+    this.nodes().each((i, node) => {
+      let $node = $(node);
+      if (ids.indexOf($node.data('node-id')) != -1) {
+        this.show($node);
+      } else {
+        this.hide($node);
+      }
+    });
   }
 
   static getDefaults() {

@@ -43,6 +43,8 @@ Then run:
 $('#tree').simpleTree();
 ```
 
+### Options
+
 Specify opened nodes:
 
 ```javascript
@@ -51,10 +53,22 @@ $('#tree').simpleTree({
 });
 ```
 
+Save node state to `sessionStorage` or `localStorage`:
+
+```javascript
+$('#tree').simpleTree({
+  store: 'session', // or 'local'
+  storeKey: 'YOUR_KEY'
+});
+```
+
+### Callbacks
+
 Run callbacks when a node is opened or closed:
 
 ```javascript
 $('#tree').simpleTree({
+  ...
 }).on('node:open', function(e, $node) {
   ...
 }).on('node:close', function(e, $node) {
@@ -62,15 +76,7 @@ $('#tree').simpleTree({
 });
 ```
 
-Save node state to `sessionStorage` or `localStorage`:
-
-```javascript
-$('#tree').simpleTree({
-  storeState: true,
-  storeKey: 'KEY_NAME'
-  storeType: 'session' // or 'local'
-});
-```
+### Functions
 
 Manipulate nodes from your script:
 

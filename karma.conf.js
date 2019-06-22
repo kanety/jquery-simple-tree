@@ -30,14 +30,15 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'src/*.js' : ['webpack', 'sourcemap'],
-      'test/*spec.js' : ['webpack', 'sourcemap'],
+      'src/*.js': ['webpack', 'sourcemap'],
+      'test/*spec.js': ['webpack', 'sourcemap'],
       'index.html': ['html2js']
     },
 
     webpack: (function() {
-      var config = require('./webpack.config');
-      config.module.rules.push({
+      var webpack = require('./webpack.config');
+      webpack.mode = 'development';
+      webpack.module.rules.push({
         test: /\.js$/,
         include: /src/,
         exclude: /node_modules/,
@@ -47,8 +48,8 @@ module.exports = function(config) {
           options: { esModules: true }
         }
       });
-      config.devtool = 'inline-source-map';
-      return config;
+      webpack.devtool = 'inline-source-map';
+      return webpack;
     })(),
 
 

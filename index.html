@@ -10,6 +10,8 @@
   <h1>Basic tree</h1>
   <button type="button" id="expander">expand</button>
   <button type="button" id="collapser">collapse</button>
+  <button type="button" id="open1">open 1</button>
+  <button type="button" id="close1">close 1</button>
   <ul id="basic">
     <li data-node-id="1">
       <span>1</span>
@@ -52,9 +54,16 @@
   </ul>
   <script>
   $('#basic').simpleTree({
-    expander: $('#expander'),
-    collapser: $('#collapser'),
-    storeState: true
+    expander: '#expander',
+    collapser: '#collapser',
+    store: 'session',
+    storeKey: 'basic'
+  });
+  $('#open1').on('click', function() {
+    $('#basic').data('simple-tree').openByID("1");
+  });
+  $('#close1').on('click', function() {
+    $('#basic').data('simple-tree').closeByID("1");
   });
   </script>
 
@@ -83,9 +92,9 @@
     </li>
   </ul>
   <script>
-  $('#opened').simpleTree({
-    opened: [1, 1.1]
-  });
+   $('#opened').simpleTree({
+     opened: [1, 1.1]
+   });
   </script>
 
   <h1>Callback</h1>
