@@ -39,12 +39,10 @@ export default class SimpleTree {
     this.bind();
   }
 
-  destroy(include_icon = true) {
+  destroy() {
     this.$root.removeClass(NAMESPACE);
+    this.$root.find('.tree-icon').remove();
     this.nodes().removeClass('tree-empty tree-opened tree-closed');
-
-    if (include_icon)
-      this.$root.find('.tree-icon').remove();
 
     this.unbind();
   }
@@ -53,8 +51,8 @@ export default class SimpleTree {
     this.nodes().each((i, node) => {
       let $node = $(node);
 
-      if ($node.children('.tree-icon').length == 0) {
-        let $icon = $(this.options.iconTemplate).addClass('tree-icon');
+      if ($node.children('.tree-handler').length == 0) {
+        let $icon = $(this.options.iconTemplate).addClass('tree-handler tree-icon');
         $node.prepend($icon);
       }
 
@@ -92,7 +90,7 @@ export default class SimpleTree {
       this.collapse()
     });
 
-    this.$root.on(`click.${NAMESPACE}`, '.tree-icon', (e) => {
+    this.$root.on(`click.${NAMESPACE}`, '.tree-handler', (e) => {
       let $node = $(e.currentTarget).parent();
       if ($node.hasClass('tree-opened')) {
         this.close($node);
