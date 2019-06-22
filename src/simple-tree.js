@@ -39,6 +39,16 @@ export default class SimpleTree {
     this.bind();
   }
 
+  destroy(include_icon = true) {
+    this.$root.removeClass(NAMESPACE);
+    this.nodes().removeClass('tree-empty tree-opened tree-closed');
+
+    if (include_icon)
+      this.$root.find('.tree-icon').remove();
+
+    this.unbind();
+  }
+
   build() {
     this.nodes().each((i, node) => {
       let $node = $(node);
@@ -95,7 +105,7 @@ export default class SimpleTree {
   unbind() {
     this.$expander.off(`.${NAMESPACE}`);
     this.$collapser.off(`.${NAMESPACE}`);
-    this.$root.off(`.${NAMESPACE}`);
+    this.$root.off(`.${NAMESPACE} node:open node:close`);
   }
 
   expand() {
