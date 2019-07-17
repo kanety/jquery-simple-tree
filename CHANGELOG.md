@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.2.0
+
+* Separate store class and change store options.
+* Destroy existing instance on initialization.
+* Change event hanlder class.
+* Tweak css.
+
 ## 0.1.2
 
 * Insert icon text before .tree-icon.

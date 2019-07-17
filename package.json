@@ -1,7 +1,7 @@
 {
   "name": "@kanety/jquery-simple-tree",
   "description": "A jquery plugin for simple tree ui",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "author": "Yoshikazu Kaneta <kaneta@sitebridge.co.jp>",
   "repository": {
     "type": "git",
