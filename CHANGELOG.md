@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.1
+
+* Fix jquery deprecated selector.
+
 ## 0.2.0
 
 * Separate store class and change store options.
