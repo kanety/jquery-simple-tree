@@ -153,7 +153,7 @@ export default class SimpleTree {
   }
 
   findByID(id) {
-    return this.$root.find(`li[data-node-id="${id}"]:first`);
+    return this.$root.find(`li[data-node-id="${id}"]`).first();
   }
 
   openByID(id) {
