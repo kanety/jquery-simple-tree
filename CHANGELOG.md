@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.3.0
+
+* Fix css class name.
+* Bundle css with js.
+
 ## 0.2.1
 
 * Fix jquery deprecated selector.
