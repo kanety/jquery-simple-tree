@@ -41,9 +41,13 @@ export default class SimpleTree {
   }
 
   destroy() {
-    this.$root.removeClass(NAMESPACE);
-    this.$root.find('.tree-icon').remove();
-    this.nodes().removeClass('tree-empty tree-opened tree-closed');
+    let detector = (i, className) => {
+      let reg = new RegExp(`${NAMESPACE}(-\\S+)?`, 'g');
+      return (className.match(reg) || []).join(' ');
+    }
+    this.$root.removeClass(detector);
+    this.nodes().removeClass(detector);
+    this.$root.find(`.${NAMESPACE}-icon`).remove();
 
     this.unbind();
   }
@@ -52,27 +56,28 @@ export default class SimpleTree {
     this.nodes().each((i, node) => {
       let $node = $(node);
 
-      if ($node.children('.tree-handler').length == 0) {
-        let $icon = $(this.options.iconTemplate).addClass('tree-handler tree-icon');
+      if ($node.children(`.${NAMESPACE}-handler`).length == 0) {
+        let $icon = $(this.options.iconTemplate).addClass(`${NAMESPACE}-handler ${NAMESPACE}-icon`);
         $node.prepend($icon);
       }
 
       let cls = $node.attr('class');
-      if (!cls || !cls.split(' ').some(str => str.match(/^(tree-empty|tree-opened|tree-closed)$/))) {
+      let reg = new RegExp(`^(${NAMESPACE}-empty|${NAMESPACE}-opened|${NAMESPACE}-closed)$`);
+      if (!cls || !cls.split(' ').some(str => str.match(reg))) {
         if ($node.data('node-lazy')) {
-          $node.addClass('tree-closed');
+          $node.addClass(`${NAMESPACE}-closed`);
         } else if ($node.children('ul').length == 0) {
-          $node.addClass('tree-empty');
+          $node.addClass(`${NAMESPACE}-empty`);
         } else if (this.opensDefault($node)) {
-          $node.addClass('tree-opened');
+          $node.addClass(`${NAMESPACE}-opened`);
         } else {
-          $node.addClass('tree-closed');
+          $node.addClass(`${NAMESPACE}-closed`);
         }
       }
 
-      if ($node.hasClass('tree-opened')) {
+      if ($node.hasClass(`${NAMESPACE}-opened`)) {
         $node.children('ul').show();
-      } else if ($node.hasClass('tree-closed')) {
+      } else if ($node.hasClass(`${NAMESPACE}-closed`)) {
         $node.children('ul').hide();
       }
     });
@@ -91,9 +96,9 @@ export default class SimpleTree {
       this.collapse()
     });
 
-    this.$root.on(`click.${NAMESPACE}`, '.tree-handler', (e) => {
+    this.$root.on(`click.${NAMESPACE}`, `.${NAMESPACE}-handler`, (e) => {
       let $node = $(e.currentTarget).parent();
-      if ($node.hasClass('tree-opened')) {
+      if ($node.hasClass(`${NAMESPACE}-opened`)) {
         this.close($node);
       } else {
         this.open($node);
@@ -133,8 +138,8 @@ export default class SimpleTree {
   }
 
   show($node) {
-    if (!$node.hasClass('tree-empty')) {
-      $node.removeClass('tree-closed').addClass('tree-opened');
+    if (!$node.hasClass(`${NAMESPACE}-empty`)) {
+      $node.removeClass(`${NAMESPACE}-closed`).addClass(`${NAMESPACE}-opened`);
       $node.children('ul').show();
     }
   }
@@ -147,8 +152,8 @@ export default class SimpleTree {
   }
 
   hide($node) {
-    if (!$node.hasClass('tree-empty')) {
-      $node.removeClass('tree-opened').addClass('tree-closed');
+    if (!$node.hasClass(`${NAMESPACE}-empty`)) {
+      $node.removeClass(`${NAMESPACE}-opened`).addClass(`${NAMESPACE}-closed`);
       $node.children('ul').hide();
     }
   }
@@ -168,7 +173,7 @@ export default class SimpleTree {
   save() {
     if (!this.store) return;
 
-    let ids = this.nodes().filter('.tree-opened').map((i, node) => {
+    let ids = this.nodes().filter(`.${NAMESPACE}-opened`).map((i, node) => {
       return $(node).data('node-id');
     }).get();
 

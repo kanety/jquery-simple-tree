@@ -117,23 +117,21 @@
   </ul>
   <p id="message"> </p>
   <script>
-  for (var i=0; i<2; i++) {
-    $('#callback').simpleTree({
-    }).on('node:open', function(e, $node) {
-      var nodeID = $node.data('node-id');
-      $('#message').append("opened " + nodeID + " ");
-      if ($node.data('node-lazy')) {
-        $node.data('node-lazy', false);
-        var newID = nodeID + '.1';
-        var loaded = '<ul><li data-node-id="' + newID + '" data-node-lazy="true"><span>' + newID + '</span></li></ul>';
-        $node.append(loaded);
-        $('#callback').data('simple-tree').build();
-      }
-    }).on('node:close', function(e, $node) {
-      var nodeID = $node.data('node-id');
-      $('#message').append("closed " + nodeID + " ");
-    });
-  }
+   $('#callback').simpleTree({
+   }).on('node:open', function(e, $node) {
+     var nodeID = $node.data('node-id');
+     $('#message').append("opened " + nodeID + " ");
+     if ($node.data('node-lazy')) {
+       $node.data('node-lazy', false);
+       var newID = nodeID + '.1';
+       var loaded = '<ul><li data-node-id="' + newID + '" data-node-lazy="true"><span>' + newID + '</span></li></ul>';
+       $node.append(loaded);
+       $('#callback').data('simple-tree').build();
+     }
+   }).on('node:close', function(e, $node) {
+     var nodeID = $node.data('node-id');
+     $('#message').append("closed " + nodeID + " ");
+   });
   </script>
 </body>
 </html>

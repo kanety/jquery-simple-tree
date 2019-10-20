@@ -1,3 +1,5 @@
+const NAMESPACE = 'simple-tree';
+
 describe('jquery-simple-tree', () => {
   beforeEach(() => {
     document.body.innerHTML = __html__['index.html'];
@@ -11,7 +13,7 @@ describe('jquery-simple-tree', () => {
     beforeEach(() => {
       $tree = $('#basic');
       $node = $tree.find('li[data-node-id="1"]');
-      $icon = $node.children('.tree-icon');
+      $icon = $node.children(`.${NAMESPACE}-icon`);
       $expander = $('#expander');
       $collapser = $('#collapser');
       $open1 = $('#open1');
@@ -65,9 +67,24 @@ describe('jquery-simple-tree', () => {
     });
     
     it('runs callbacks', () => {
-      $tree.find('li[data-node-id="1.1"] .tree-icon').click().click();
+      $tree.find(`li[data-node-id="1.1"] .${NAMESPACE}-icon`).click().click();
       expect($message.html()).toContain("opened 1.1");
       expect($message.html()).toContain("closed 1.1");
+    });
+  });
+
+  describe('destroy', () => {
+    let $tree;
+
+    beforeEach(() => {
+      eval($('script').text());
+      $tree = $('#callback');
+    });
+    
+    it('destroy', () => {
+      $tree.data(NAMESPACE).destroy();
+      expect($tree.hasClass(NAMESPACE)).toEqual(false);
+      expect($._data($tree.get(0), 'events')).toEqual(undefined);
     });
   });
 });

@@ -1,11 +1,13 @@
-ul.simple-tree {
+$NAMESPACE: simple-tree;
+
+.#{$NAMESPACE} {
   padding: 0;
   margin: 0;
 
   li {
     list-style-type: none;
   }
-  li > .tree-icon {
+  &-icon {
     display: inline-block;
     width: 1.5em;
     line-height: 1.5em;
@@ -14,13 +16,13 @@ ul.simple-tree {
     text-align: center;
     cursor: pointer;
   }
-  li.tree-opened > .tree-icon:before {
+  &-opened > &-icon:before {
     content: '-';
   }
-  li.tree-closed > .tree-icon:before {
+  &-closed > &-icon:before {
     content: '+';
   }
-  li.tree-empty > .tree-icon {
+  &-empty > &-icon {
     visibility: hidden;
   }
 }
