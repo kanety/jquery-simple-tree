@@ -56,8 +56,8 @@ export default class SimpleTree {
     this.nodes().each((i, node) => {
       let $node = $(node);
 
-      if ($node.children(`.${NAMESPACE}-handler`).length == 0) {
-        let $icon = $(this.options.iconTemplate).addClass(`${NAMESPACE}-handler ${NAMESPACE}-icon`);
+      if ($node.children(`.${NAMESPACE}-icon`).length == 0) {
+        let $icon = $(this.options.iconTemplate).addClass(`${NAMESPACE}-icon`);
         $node.prepend($icon);
       }
 
@@ -98,13 +98,18 @@ export default class SimpleTree {
       this.collapse()
     });
 
-    this.$root.on(`click.${NAMESPACE}`, `.${NAMESPACE}-handler`, (e) => {
+    this.$root.on(`click.${NAMESPACE}`, `.${NAMESPACE}-icon`, (e) => {
       e.preventDefault();
       let $node = $(e.currentTarget).parent();
-      if ($node.hasClass(`${NAMESPACE}-opened`)) {
+      if (this.isOpened($node)) {
         this.close($node);
       } else {
         this.open($node);
+      }
+    }).on(`keydown.${NAMESPACE}`, `.${NAMESPACE}-icon`, (e) => {
+      let $node = $(e.currentTarget).parent();
+      if (this.keydown($node, e.keyCode)) {
+        e.preventDefault();
       }
     });
   }
@@ -133,18 +138,24 @@ export default class SimpleTree {
     return this.$root.find('li');
   }
 
+  icons() {
+    return this.$root.find(`.${NAMESPACE}-icon`);
+  }
+
+  visibleIcons() {
+    let $icons = this.icons().filter(':visible');
+    return $icons.filter((index) => $icons.eq(index).css('visibility') != 'hidden');
+  }
+
+  iconOf($node) {
+    return $node.children(`.${NAMESPACE}-icon`).first();
+  }
+
   open($node) {
     this.show($node);
     this.save();
 
     $node.trigger('node:open', [$node]);
-  }
-
-  show($node) {
-    if (!$node.hasClass(`${NAMESPACE}-empty`)) {
-      $node.removeClass(`${NAMESPACE}-closed`).addClass(`${NAMESPACE}-opened`);
-      $node.children('ul').show();
-    }
   }
 
   close($node) {
@@ -154,10 +165,75 @@ export default class SimpleTree {
     $node.trigger('node:close', [$node]);
   }
 
+  show($node) {
+    if (!this.isEmpty($node)) {
+      $node.removeClass(`${NAMESPACE}-closed`).addClass(`${NAMESPACE}-opened`);
+      $node.children('ul').show();
+    }
+  }
+
   hide($node) {
-    if (!$node.hasClass(`${NAMESPACE}-empty`)) {
+    if (!this.isEmpty($node)) {
       $node.removeClass(`${NAMESPACE}-opened`).addClass(`${NAMESPACE}-closed`);
       $node.children('ul').hide();
+    }
+  }
+
+  isOpened($node) {
+    return $node.hasClass(`${NAMESPACE}-opened`);
+  }
+
+  isClosed($node) {
+    return $node.hasClass(`${NAMESPACE}-closed`);
+  }
+
+  isEmpty($node) {
+    return $node.hasClass(`${NAMESPACE}-empty`);
+  }
+
+  keydown($node, keyCode) {
+    switch (keyCode) {
+    case 37: // left
+      this.keyLeft($node);
+      return true;
+    case 38: // up
+      this.keyUp($node);
+      return true;
+    case 39: // right
+      this.keyRight($node);
+      return true;
+    case 40: // down
+      this.keyDown($node);
+      return true;
+    }
+    return false;
+  }
+
+  keyUp($node) {
+    let $icons = this.visibleIcons();
+    let index = $icons.index(this.iconOf($node)) - 1;
+    if (index >= 0) $icons.eq(index).focus();
+  }
+
+  keyDown($node) {
+    let $icons = this.visibleIcons();
+    let index = $icons.index(this.iconOf($node)) + 1;
+    if (index >= 0) $icons.eq(index).focus();
+  }
+
+  keyRight($node) {
+    if (this.isOpened($node)) {
+      this.iconOf($node.find(`> ul > li`)).focus();
+    } else {
+      this.open($node);
+    }
+  }
+
+  keyLeft($node) {
+    if (this.isClosed($node)) {
+      this.iconOf($node.parent().parent()).focus();
+    } else {
+      this.close($node);
     }
   }
 

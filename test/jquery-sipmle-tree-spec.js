@@ -1,5 +1,9 @@
 const NAMESPACE = 'simple-tree';
 
+function keydown(elem, code) {
+  $(elem).trigger($.Event('keydown', { keyCode: code }));
+}
+
 describe('jquery-simple-tree', () => {
   beforeEach(() => {
     document.body.innerHTML = __html__['index.html'];
@@ -39,6 +43,52 @@ describe('jquery-simple-tree', () => {
       expect($node.children('ul').is(':visible')).toEqual(false);
       $open1.click();
       expect($node.children('ul').is(':visible')).toEqual(true);
+    });
+  });
+
+  describe('keyboard events', () => {
+    let $tree, $node, $icon;
+
+    beforeEach(() => {
+      $tree = $('#basic');
+      $node = $tree.find('li[data-node-id="1.1"]');
+      $icon = $node.children(`.${NAMESPACE}-icon`);
+    });
+
+    it('moves focus by up key', () => {
+      $tree.data(NAMESPACE).expand();
+      keydown($icon, 38);
+      expect($(document.activeElement).parent().attr('data-node-id')).toEqual('1');
+    });
+
+    it('moves focus by down key', () => {
+      $tree.data(NAMESPACE).expand();
+      keydown($icon, 40);
+      expect($(document.activeElement).parent().attr('data-node-id')).toEqual('1.1.1');
+    });
+
+    it('moves focus by left key', () => {
+      $tree.data(NAMESPACE).close($node);
+      keydown($icon, 37);
+      expect($(document.activeElement).parent().attr('data-node-id')).toEqual('1');
+    });
+
+    it('closes node by left key', () => {
+      $tree.data(NAMESPACE).open($node);
+      keydown($icon, 37);
+      expect($node.find('ul').is(':visible')).toEqual(false);
+    });
+
+    it('moves focus by right key', () => {
+      $tree.data(NAMESPACE).open($node);
+      keydown($icon, 39);
+      expect($(document.activeElement).parent().attr('data-node-id')).toEqual('1.1.1');
+    });
+
+    it('opens node by right key', () => {
+      $tree.data(NAMESPACE).close($node);
+      keydown($icon, 39);
+      expect($node.find('ul').is(':visible')).toEqual(true);
     });
   });
 
