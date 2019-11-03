@@ -8,7 +8,7 @@ const DEFAULTS = {
   expander: null,
   collapser: null,
   opened: 'all',
-  iconTemplate: '<span />',
+  iconTemplate: '<a href="#" />',
   store: null,
   storeKey: null
 };
@@ -90,13 +90,16 @@ export default class SimpleTree {
 
   bind() {
     this.$expander.on(`click.${NAMESPACE}`, (e) => {
+      e.preventDefault();
       this.expand()
     });
     this.$collapser.on(`click.${NAMESPACE}`, (e) => {
+      e.preventDefault();
       this.collapse()
     });
 
     this.$root.on(`click.${NAMESPACE}`, `.${NAMESPACE}-handler`, (e) => {
+      e.preventDefault();
       let $node = $(e.currentTarget).parent();
       if ($node.hasClass(`${NAMESPACE}-opened`)) {
         this.close($node);
