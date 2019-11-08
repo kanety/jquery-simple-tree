@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.4.0
+
+* Support focus movement by keyboard.
+* Change default icon template from span tag to a tag.
+
 ## 0.3.0
 
 * Fix css class name.
