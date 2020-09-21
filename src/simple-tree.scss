@@ -23,7 +23,7 @@ $NAMESPACE: simple-tree;
   &-closed > &-icon:before {
     content: '+';
   }
-  &-empty > &-icon {
+  &-hidden-icon > &-icon {
     visibility: hidden;
   }
 }

@@ -56,23 +56,24 @@ export default class SimpleTree {
       }
 
       let cls = $node.attr('class');
-      let reg = new RegExp(`^${NAMESPACE}-(empty|opened|closed)$`);
+      let reg = new RegExp(`^${NAMESPACE}-(opened|closed)$`);
       if (!cls || !cls.split(' ').some(str => str.match(reg))) {
-        if ($node.data('node-has-children')) {
-          $node.addClass(`${NAMESPACE}-closed`);
-        } else if ($node.children('ul').length == 0) {
-          $node.addClass(`${NAMESPACE}-empty`);
+        if ($node.children('ul').length == 0) {
+          if ($node.data('node-has-children')) {
+            $node.addClass(`${NAMESPACE}-closed`);
+          } else {
+            $node.addClass(`${NAMESPACE}-closed ${NAMESPACE}-hidden-icon`);
+          }
+        } else if ($node.data('node-keep-open')) {
+          $node.addClass(`${NAMESPACE}-opened ${NAMESPACE}-hidden-icon`);
+          $node.children('ul').show();
         } else if (this.opensDefault($node)) {
           $node.addClass(`${NAMESPACE}-opened`);
+          $node.children('ul').show();
         } else {
           $node.addClass(`${NAMESPACE}-closed`);
+          $node.children('ul').hide();
         }
-      }
-
-      if ($node.hasClass(`${NAMESPACE}-opened`)) {
-        $node.children('ul').show();
-      } else if ($node.hasClass(`${NAMESPACE}-closed`)) {
-        $node.children('ul').hide();
       }
     });
   }
@@ -169,17 +170,19 @@ export default class SimpleTree {
   }
 
   show($node) {
-    if (!this.isEmpty($node)) {
-      $node.removeClass(`${NAMESPACE}-closed`).addClass(`${NAMESPACE}-opened`);
-      $node.children('ul').show();
-    }
+    if ($node.hasClass(`${NAMESPACE}-hidden-icon`)) return;
+    if ($node.data('node-keep-open')) return;
+
+    $node.removeClass(`${NAMESPACE}-closed`).addClass(`${NAMESPACE}-opened`);
+    $node.children('ul').show();
   }
 
   hide($node) {
-    if (!this.isEmpty($node)) {
-      $node.removeClass(`${NAMESPACE}-opened`).addClass(`${NAMESPACE}-closed`);
-      $node.children('ul').hide();
-    }
+    if ($node.hasClass(`${NAMESPACE}-hidden-icon`)) return;
+    if ($node.data('node-keep-open')) return;
+
+    $node.removeClass(`${NAMESPACE}-opened`).addClass(`${NAMESPACE}-closed`);
+    $node.children('ul').hide();
   }
 
   isOpened($node) {
@@ -190,8 +193,8 @@ export default class SimpleTree {
     return $node.hasClass(`${NAMESPACE}-closed`);
   }
 
-  isEmpty($node) {
-    return $node.hasClass(`${NAMESPACE}-empty`);
+  hasChildren($node) {
+    return $node.children('ul').length > 0;
   }
 
   keydown($node, keyCode) {

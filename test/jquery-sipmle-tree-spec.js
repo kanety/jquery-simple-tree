@@ -33,7 +33,7 @@ describe('jquery-simple-tree', () => {
 
     it('has expander and collapser', () => {
       $collapser.click();
-      expect($tree.find('ul:visible').length).toEqual(0);
+      expect($tree.find('ul:visible').length).toEqual(1);
       $expander.click();
       expect($tree.find('ul:hidden').length).toEqual(0);
     });
