@@ -109,10 +109,10 @@
         <li data-node-id="1.1">
           <span>1.1</span>
           <ul>
-            <li data-node-id="1.1.1" data-node-lazy="true">
+            <li data-node-id="1.1.1" data-node-has-children="true">
               <span>1.1.1</span>
             </li>
-            <li data-node-id="1.1.2" data-node-lazy="true">
+            <li data-node-id="1.1.2" data-node-has-children="true">
               <span>1.1.2</span>
             </li>
           </ul>
@@ -126,10 +126,9 @@
    }).on('node:open', function(e, $node) {
      var nodeID = $node.data('node-id');
      $('#message').append("opened " + nodeID + " ");
-     if ($node.data('node-lazy')) {
-       $node.data('node-lazy', false);
+     if ($node.data('node-has-children') && $node.children('ul').length == 0) {
        var newID = nodeID + '.1';
-       var loaded = '<ul><li data-node-id="' + newID + '" data-node-lazy="true"><span>' + newID + '</span></li></ul>';
+       var loaded = '<ul><li data-node-id="' + newID + '" data-node-has-children="true"><span>' + newID + '</span></li></ul>';
        $node.append(loaded);
        $('#callback').data('simple-tree').build();
      }

@@ -35,20 +35,14 @@ export default class SimpleTree {
   init() {
     this.$root.addClass(NAMESPACE);
     this.build();
-
     this.unbind();
     this.bind();
   }
 
   destroy() {
-    let detector = (i, className) => {
-      let reg = new RegExp(`${NAMESPACE}(-\\S+)?`, 'g');
-      return (className.match(reg) || []).join(' ');
-    }
-    this.$root.removeClass(detector);
-    this.nodes().removeClass(detector);
-    this.$root.find(`.${NAMESPACE}-icon`).remove();
-
+    this.$root.removeClass(NAMESPACE);
+    this.$root.off(`node:open node:close`);
+    this.unbuild();
     this.unbind();
   }
 
@@ -62,9 +56,9 @@ export default class SimpleTree {
       }
 
       let cls = $node.attr('class');
-      let reg = new RegExp(`^(${NAMESPACE}-empty|${NAMESPACE}-opened|${NAMESPACE}-closed)$`);
+      let reg = new RegExp(`^${NAMESPACE}-(empty|opened|closed)$`);
       if (!cls || !cls.split(' ').some(str => str.match(reg))) {
-        if ($node.data('node-lazy')) {
+        if ($node.data('node-has-children')) {
           $node.addClass(`${NAMESPACE}-closed`);
         } else if ($node.children('ul').length == 0) {
           $node.addClass(`${NAMESPACE}-empty`);
@@ -81,6 +75,15 @@ export default class SimpleTree {
         $node.children('ul').hide();
       }
     });
+  }
+
+  unbuild() {
+    let detector = (i, className) => {
+      let reg = new RegExp(`${NAMESPACE}(-\\S+)?`, 'g');
+      return (className.match(reg) || []).join(' ');
+    }
+    this.nodes().removeClass(detector);
+    this.$root.find(`.${NAMESPACE}-icon`).remove();
   }
 
   opensDefault($node) {
@@ -117,7 +120,7 @@ export default class SimpleTree {
   unbind() {
     this.$expander.off(`.${NAMESPACE}`);
     this.$collapser.off(`.${NAMESPACE}`);
-    this.$root.off(`.${NAMESPACE} node:open node:close`);
+    this.$root.off(`.${NAMESPACE}`);
   }
 
   expand() {
