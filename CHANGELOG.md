@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.5.0
+
+* Add `node-keep-open` flag to keep node opened.
+* Change css from `simple-tree-empty` to `simple-tree-hidden-icon`.
+* Change data attributes from `node-lazy` to `node-has-children`.
+
 ## 0.4.0
 
 * Support focus movement by keyboard.
