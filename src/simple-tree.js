@@ -109,6 +109,12 @@ export default class SimpleTree {
         this.close($node);
       } else {
         this.open($node);
+        let $siblingNodes = $($node).siblings();
+        for (let i = $siblingNodes.length - 1; i >= 0; i--) {
+          let sibling = $siblingNodes[i];
+          if (this.isOpened($(sibling)))
+            this.close($(sibling));
+        }
       }
     }).on(`keydown.${NAMESPACE}`, `.${NAMESPACE}-icon`, (e) => {
       let $node = $(e.currentTarget).parent();
